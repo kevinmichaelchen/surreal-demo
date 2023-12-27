@@ -3,17 +3,20 @@ Taking [SurrealDB][surreal] for a spin. The domain I'm interested in exploring i
 [surreal]: https://surrealdb.com/
 [ldap]: https://en.wikipedia.org/wiki/Lightweight_Directory_Access_Protocol
 
-## Surreal Wishlist
-
-- Idempotent creates (e.g., `create if not exists`)
-- Scripting / Sequences `for 1..10` syntax
-
 ## Starting
 
-Spin it up with:
+[run-docker]: https://docs.surrealdb.com/docs/installation/running/docker
+
+Spin up the database [with Docker][run-docker]:
 
 ```shell
 docker run --rm --pull always -p 8000:8000 surrealdb/surrealdb:latest start
+```
+
+Create some data with:
+
+```shell
+go run main.go
 ```
 
 ## GUI
@@ -40,16 +43,42 @@ SELECT
 FROM org_unit:123;
 ```
 
+returns
+
+```json
+[
+  {
+    "children": [
+      "org_unit:cm5m9km1fpl4pmfrtn3g"
+    ],
+    "grandchildren": [],
+    "grandparent": [],
+    "parent": [
+      "org_unit:cm5m9km1fpl4pmfrtn50",
+      "org_unit:cm5m9km1fpl4pmfrtn4g"
+    ]
+  }
+]
+```
+
 ## Experimenting
+
+### Exporting Data
+
+Use the [`export`][export] command to create a new dataset.
+
+[export]: https://docs.surrealdb.com/docs/cli/export/
+
+```shell
+pkgx surreal export --namespace default --database default
+```
 
 ### Importing Dataset
 
-Still figuring this part out... There are [`export`][export] and
-[`import`][import] commands.
+Use the [`import`][import] command to import a dataset.
 
-[export]: https://docs.surrealdb.com/docs/cli/export/
 [import]: https://docs.surrealdb.com/docs/cli/import/
 
-```
-surreal import
+```shell
+pkgx surreal import --namespace default --database default
 ```
